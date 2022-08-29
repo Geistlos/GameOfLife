@@ -12,6 +12,10 @@ public class GridGenerator : MonoBehaviour
     //GRID
     [SerializeField]
     GameObject tilePrefab;
+    [SerializeField]
+    bool randomMap;
+    [SerializeField]
+    float speed = 0.2f;
 
     static int mapWidth = 100;
     static int mapHeight = 100;
@@ -49,13 +53,17 @@ public class GridGenerator : MonoBehaviour
                 script.coordY = j;
                 gridScript[i, j] = script;
                 tileRenderer[i, j] = tile.GetComponent<SpriteRenderer>();
-                /*var rand = (int)Mathf.Floor(Random.Range(0f, 1.1f));
-                gridValue[i, j] = rand;
-                newGridValue[i, j] = rand;
-                if (rand == 0)
+
+                if (randomMap == true)
                 {
-                    tileRenderer[i, j].color = Color.black;
-                }*/
+                    var rand = (int)Mathf.Floor(Random.Range(0f, 1.5f));
+                    gridValue[i, j] = rand;
+                    newGridValue[i, j] = rand;
+                    if (rand == 0)
+                    {
+                        tileRenderer[i, j].color = Color.black;
+                    }
+                }
             }
         }
     }
@@ -65,7 +73,7 @@ public class GridGenerator : MonoBehaviour
         if (mapGenerated && update)
             StartCoroutine(UpdateGrid());
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Space))
             update = true;
     }
 
@@ -79,7 +87,7 @@ public class GridGenerator : MonoBehaviour
                 CheckTilesAround(i, j);
             }
         }
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(speed);
         ChangeGrid();
         update = true;
     }
@@ -94,7 +102,7 @@ public class GridGenerator : MonoBehaviour
                     tileRenderer[i, j].color = Color.black;
                 else
                     tileRenderer[i, j].color = Color.white;
-                gridValue = newGridValue;
+                gridValue[i, j] = newGridValue[i, j];
             }
         }
     }
@@ -140,7 +148,11 @@ public class GridGenerator : MonoBehaviour
         {
             newGridValue[coordX, coordY] = 0;
         }
-        if (gridValue[coordX, coordY] == 0 && neighbour == 3)
+        if (neighbour == 3)
+        {
+            newGridValue[coordX, coordY] = 1;
+        }
+        if (gridValue[coordX, coordY] == 1 && neighbour == 2)
         {
             newGridValue[coordX, coordY] = 1;
         }
