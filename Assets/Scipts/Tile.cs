@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    //CONTROLS
     public int coordX;
     public int coordY;
     GridGenerator Gm;

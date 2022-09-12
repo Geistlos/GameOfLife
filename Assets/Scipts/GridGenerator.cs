@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class GridGenerator : MonoBehaviour
 {
-    //private static GridGenerator instance;
     public static GridGenerator Instance { get; private set; }
 
+    //CONTROLS
     bool mapGenerated;
     bool update;
-    //GRID
+
+    //LINKS IN INSPECTOR
     [SerializeField]
     GameObject tilePrefab;
     [SerializeField]
@@ -17,10 +18,11 @@ public class GridGenerator : MonoBehaviour
     [SerializeField]
     float speed = 0.2f;
 
+    //STATS
     static int mapWidth = 100;
     static int mapHeight = 100;
 
-    [SerializeField]
+    //GRIDS
     SpriteRenderer[,] tileRenderer = new SpriteRenderer[mapWidth, mapHeight];
     Tile[,] gridScript = new Tile[mapWidth, mapHeight];
     public int[,] gridValue = new int[mapWidth, mapHeight];
