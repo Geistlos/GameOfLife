@@ -14,6 +14,7 @@ public class Tile : MonoBehaviour
         Gm = GridGenerator.Instance;
     }
 
+    //Click on tile to switch from alive to dead or dead to alive
     private void OnMouseDown()
     {
         if (Gm.gridValue[coordX, coordY] == 0)

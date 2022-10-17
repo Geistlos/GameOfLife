@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GridGenerator : MonoBehaviour
 {
+    //SINGLETON
     public static GridGenerator Instance { get; private set; }
 
     //CONTROLS
@@ -43,6 +44,7 @@ public class GridGenerator : MonoBehaviour
         mapGenerated = true;
     }
 
+    //Instantiate tiles, 
     void InstantiationTiles()
     {
         for (int i = 0; i < mapWidth - 1; i++)
@@ -56,6 +58,7 @@ public class GridGenerator : MonoBehaviour
                 gridScript[i, j] = script;
                 tileRenderer[i, j] = tile.GetComponent<SpriteRenderer>();
 
+                //Randomize starting values of tiles
                 if (randomMap == true)
                 {
                     var rand = (int)Mathf.Floor(Random.Range(0f, 1.5f));
@@ -72,6 +75,7 @@ public class GridGenerator : MonoBehaviour
 
     private void Update()
     {
+        //Update map if the timer is done && the map has been generated
         if (mapGenerated && update)
             StartCoroutine(UpdateGrid());
 
@@ -79,6 +83,7 @@ public class GridGenerator : MonoBehaviour
             update = true;
     }
 
+    //Coroutine to wait a given time between each update
     IEnumerator UpdateGrid()
     {
         update = false;
@@ -94,6 +99,7 @@ public class GridGenerator : MonoBehaviour
         update = true;
     }
 
+    //Update the value and color of the tiles
     void ChangeGrid()
     {
         for (int i = 0; i < mapWidth - 1; i++)
@@ -110,7 +116,7 @@ public class GridGenerator : MonoBehaviour
     }
 
 
-
+    //Rules of life and death
     void CheckTilesAround(int coordX, int coordY)
     {
         var neighbour = 0;
