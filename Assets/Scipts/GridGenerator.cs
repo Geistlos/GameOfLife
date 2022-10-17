@@ -10,14 +10,12 @@ public class GridGenerator : MonoBehaviour
     //CONTROLS
     bool mapGenerated;
     bool update;
+    Coroutine co;
 
     //LINKS IN INSPECTOR
     [SerializeField]
     GameObject tilePrefab;
-    [SerializeField]
-    bool randomMap;
-    [SerializeField]
-    float speed = 0.2f;
+    public float speed;
 
     //STATS
     static int mapWidth = 100;
@@ -57,18 +55,6 @@ public class GridGenerator : MonoBehaviour
                 script.coordY = j;
                 gridScript[i, j] = script;
                 tileRenderer[i, j] = tile.GetComponent<SpriteRenderer>();
-
-                //Randomize starting values of tiles
-                if (randomMap == true)
-                {
-                    var rand = (int)Mathf.Floor(Random.Range(0f, 1.5f));
-                    gridValue[i, j] = rand;
-                    newGridValue[i, j] = rand;
-                    if (rand == 0)
-                    {
-                        tileRenderer[i, j].color = Color.black;
-                    }
-                }
             }
         }
     }
@@ -76,17 +62,15 @@ public class GridGenerator : MonoBehaviour
     private void Update()
     {
         //Update map if the timer is done && the map has been generated
-        if (mapGenerated && update)
-            StartCoroutine(UpdateGrid());
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            update = true;
+        if (mapGenerated && update && co == null)
+            co = StartCoroutine(UpdateGrid());
     }
 
     //Coroutine to wait a given time between each update
     IEnumerator UpdateGrid()
     {
         update = false;
+        yield return new WaitForSeconds(speed);
         for (int i = 0; i < mapWidth - 1; i++)
         {
             for (int j = 0; j < mapHeight - 1; j++)
@@ -94,9 +78,10 @@ public class GridGenerator : MonoBehaviour
                 CheckTilesAround(i, j);
             }
         }
-        yield return new WaitForSeconds(speed);
+
         ChangeGrid();
         update = true;
+        co = null;
     }
 
     //Update the value and color of the tiles
@@ -164,5 +149,42 @@ public class GridGenerator : MonoBehaviour
         {
             newGridValue[coordX, coordY] = 1;
         }
+    }
+
+    public void ChangeSpeed(float newSpeed)
+    {
+        speed = newSpeed;
+        StopCoroutine(UpdateGrid());
+        if (update && co == null)
+            co = StartCoroutine(UpdateGrid());
+    }
+
+    public void RandomizeMap()
+    {
+        for (int i = 0; i < mapWidth - 1; i++)
+        {
+            for (int j = 0; j < mapHeight - 1; j++)
+            {
+                var rand = (int)Mathf.Floor(Random.Range(0f, 1.5f));
+                gridValue[i, j] = rand;
+                newGridValue[i, j] = rand;
+                if (rand != 0)
+                {
+                    tileRenderer[i, j].color = Color.white;
+                }
+            }
+        }
+    }
+
+    public void Stop()
+    {
+        if (co != null)
+            StopCoroutine(co);
+        co = null;
+    }
+
+    public void StartUpdate()
+    {
+        update = true;
     }
 }
