@@ -42,7 +42,7 @@ public class GridGenerator : MonoBehaviour
         mapGenerated = true;
     }
 
-    //Instantiate tiles, 
+    //Instantiate tiles
     void InstantiationTiles()
     {
         for (int i = 0; i < mapWidth - 1; i++)
@@ -186,5 +186,18 @@ public class GridGenerator : MonoBehaviour
     public void StartUpdate()
     {
         update = true;
+    }
+
+    public void ResetMap()
+    {
+        for (int i = 0; i < mapWidth - 1; i++)
+        {
+            for (int j = 0; j < mapHeight - 1; j++)
+            {
+                gridValue[i, j] = 0;
+                newGridValue[i, j] = 0;
+                tileRenderer[i, j].color = Color.black;
+            }
+        }
     }
 }
